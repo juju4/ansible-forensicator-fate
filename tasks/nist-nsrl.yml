@@ -4,19 +4,25 @@
   file: dest=/home/sansforensics/Downloads state=directory mode=0755
 
 ## Jenkins job looks for NSRLFile.txt.zip
-- name: Download NIST NSRL hash database
-  get_url:
-    url: "{{ ffate_nist_nsrl_archive }}"
-    dest: "/home/sansforensics/Downloads/{{ ffate_nist_nsrl_archive | basename }}"
-    checksum: "{{ ffate_nist_nsrl_archive_hash }}"
-    mode: '0644'
-- name: decompress NIST NSRL hash database
-  unarchive:
-    src: "/home/sansforensics/Downloads/{{ ffate_nist_nsrl_archive | basename }}"
-    dest: /home/sansforensics/Downloads
-    remote_src: true
-    mode: '0644'
-    creates: /home/sansforensics/Downloads/NSRLFile.txt
+## Travis disk size limit
+- block:
+    - name: Download NIST NSRL hash database
+      get_url:
+        url: "{{ ffate_nist_nsrl_archive }}"
+        dest: "/home/sansforensics/Downloads/{{ ffate_nist_nsrl_archive | basename }}"
+        checksum: "{{ ffate_nist_nsrl_archive_hash }}"
+        mode: '0644'
+    - name: decompress NIST NSRL hash database
+      unarchive:
+        src: "/home/sansforensics/Downloads/{{ ffate_nist_nsrl_archive | basename }}"
+        dest: /home/sansforensics/Downloads
+        remote_src: true
+        mode: '0644'
+        creates: /home/sansforensics/Downloads/NSRLFile.txt
+  when: not (ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true')
+- name: create empty NSRL file for travis
+  file: dest=/home/sansforensics/Downloads/NSRLFile.txt state=touch
+  when: ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true'
 
 ## http://www.nsrl.nist.gov/nsrl-faqs.html#faq14 Which hashes are for known bad files? just "known application files."
 ## https://digital-forensics.sans.org/blog/2010/02/22/extracting-known-bad-hashset-from-nsrl/
