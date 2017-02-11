@@ -25,6 +25,7 @@
       lineinfile:
         dest: /home/sansforensics/Downloads/NSRLFile.txt
         line: "{{ item }}"
+        create: yes
       with_items:
         - '"SHA-1","MD5","CRC32","FileName","FileSize","ProductCode","OpSystemCode","SpecialCode"'
         - '"0000002D9D62AEBE1E0E9DB6C4C4C7C16A163D2C","1D6EBB5A789ABD108FF578263E1F40F3","FFFFFFFF","_sfx_0024._p",4109,21000,"358",""'
