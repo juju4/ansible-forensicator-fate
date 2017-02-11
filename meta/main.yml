@@ -17,9 +17,7 @@ galaxy_info:
   - system
   - security
 dependencies:
-#  - juju4.sift
-#  - juju4.jenkins
-#  - sift
-  - jenkins
+  - juju4.sift
+  - juju4.jenkins
   - geerlingguy.postgresql
 
