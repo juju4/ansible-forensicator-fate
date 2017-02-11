@@ -28,6 +28,7 @@ script:
   - "ansible-playbook -i inventory --connection=local --sudo -vvvv test/integration/default/default.yml"
 
 ## debug
+  - "cat /blacklist/known_bad_files.txt"
   - "cat /var/log/jenkins/jenkins.log"
 
 # Run the role/playbook again, checking to make sure it's idempotent.
