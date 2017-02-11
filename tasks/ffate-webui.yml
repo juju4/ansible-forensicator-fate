@@ -1,0 +1,89 @@
+---
+
+- name: ensure directories exists
+  file: dest={{ item }} state=directory mode=0755 owner=sansforensics
+  with_items:
+    - "{{ ffate_www }}/templates"
+    - "{{ ffate_www }}/public_html"
+    - "{{ ffate_www2 }}"
+    - /home/sansforensics/Downloads
+    - /etc/uwsgi
+
+- stat: path="{{ ffate_www2 }}/ffate.py"
+  register: hasFfatepy
+- name: install ffate.py web interface
+  copy:
+    src: "{{ ffate_git_src }}/webapp/ffate.py"
+    dest: "{{ ffate_www2 }}/ffate.py"
+    remote_src: true
+    backup: yes
+  when: not hasFfatepy.stat.exists
+
+# + webpy db credentials
+- name: update ffate.py
+  replace:
+    dest: "{{ ffate_www2 }}/ffate.py"
+    regexp: "{{ item.re }}"
+    replace: "{{ item.rep }}"
+    backup: yes
+  with_items:
+    - { re: 8080, rep: "{{ jenkins_http_port }}" }
+
+- name: list ffate web templates
+  command: "find {{ ffate_git_src }}/webapp/templates/ -type f"
+  changed_when: false
+  ignore_errors: true
+  register: lstemplates
+- debug: var=lstemplates
+- name: install ffate templates
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ffate_www }}/templates"
+    remote_src: true
+    backup: yes
+  with_items: "{{ lstemplates.stdout_lines }}"
+
+- name: install ffate.css
+  copy:
+    src: "{{ ffate_git_src }}/webapp/ffate.css"
+    dest: "{{ ffate_www2 }}/public_html"
+    remote_src: true
+    backup: yes
+
+- name: ensure web dependencies are present
+  apt: name={{ item }} state=present
+  with_items:
+    - nginx
+    - uwsgi-emperor
+    - uwsgi-plugin-python
+    - python-webpy
+- name: install uwsgi
+  pip: name=uwsgi state=present
+- name: set uwsgi config
+  template:
+    src: ffate.ini.j2
+    dest: /etc/uwsgi-emperor/vassals/ffate.ini
+    mode: '0644'
+- name: set nginx ffate config
+  template:
+    src: ffate-nginx.conf.j2
+    dest: /etc/nginx/sites-available/ffate
+    mode: '0644'
+  notify:
+    - restart nginx
+- name: enabled nginx ffate config
+  file:
+    src: /etc/nginx/sites-available/ffate
+    dest: /etc/nginx/sites-enabled/ffate
+    state: link
+    mode: '0644'
+  notify:
+    - restart nginx
+
+- name: check if uwsgi ffate.log exists
+  stat: path=/var/log/uwsgi/ffate.log
+  register: uwsgilog
+- name: touch ffate.log
+  file: dest=/var/log/uwsgi/ffate.log state=touch owner=www-data mode=0644
+  when: not uwsgilog.stat.exists
+

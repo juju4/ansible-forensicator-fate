@@ -1,0 +1,51 @@
+---
+
+- hosts: ffate
+  vars:
+    - sift_docker: false
+    - ffate_git_src: /home/sansforensics/forensicator-fate
+    - ffate_www: /var/www
+    - ffate_www2: "{{ ffate_www }}/forensicator-fate"
+    - ffate_elk_ip: 10.21.181.97
+    - jenkins_plugins:
+        - parameterized-trigger
+        - conditional-buildstep
+## https://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin
+        - rebuild
+    - jenkins_init_changes:
+#        - {option: "JENKINS_ARGS", value: "--prefix={{ jenkins_url_prefix }} --httpListenAddress=127.0.0.1 --ajp13Port=-1 --httpsPort=-1 --sessionTimeout=180"}
+        - {option: "JENKINS_ARGS", value: "--prefix={{ jenkins_url_prefix }} --ajp13Port=-1 --httpsPort=-1 --sessionTimeout=180"}
+        - {option: "JENKINS_JAVA_OPTIONS", value: "{{ jenkins_java_options }}"}
+    ## path on orchestrator
+    - ffate_local_src: /opt/tmp/vagrant/homelab/roles/juju4.forensicator-fate/forensicator-fate/jenkins/jobs
+    - jenkins_job_examples:
+        - "{{ ffate_local_src }}/bulk_extractor_disk.xml"
+        - "{{ ffate_local_src }}/bulk_extractor_memory.xml"
+        - "{{ ffate_local_src }}/bulk_extractor.xml"
+        - "{{ ffate_local_src }}/Carving.xml"
+        - "{{ ffate_local_src }}/findWindowsEvidence.xml"
+        - "{{ ffate_local_src }}/FStimeline.xml"
+        - "{{ ffate_local_src }}/IOC.xml"
+        - "{{ ffate_local_src }}/NSRL.xml"
+        - "{{ ffate_local_src }}/PlasoExporter.xml"
+        - "{{ ffate_local_src }}/sorter.xml"
+        - "{{ ffate_local_src }}/Supertimeline.xml"
+        - "{{ ffate_local_src }}/Volatility.0.xml"
+        - "{{ ffate_local_src }}/Volatility.1.xml"
+        - "{{ ffate_local_src }}/Volatility.2.xml"
+        - "{{ ffate_local_src }}/Volatility.3.xml"
+        - "{{ ffate_local_src }}/Volatility.4.xml"
+        - "{{ ffate_local_src }}/Volatility.5.xml"
+        - "{{ ffate_local_src }}/Volatility.6.xml"
+        - "{{ ffate_local_src }}/Volatility.7.xml"
+        - "{{ ffate_local_src }}/Volatility.8.xml"
+        - "{{ ffate_local_src }}/Volatility.xml"
+    - postgresql_databases:
+        - name: webpy
+    - postgresql_users:
+        - name: webpy
+          priv: "ALL/config:ALL/cases:ALL"
+          db: webpy
+  roles:
+    - juju4.forensicator-fate
+

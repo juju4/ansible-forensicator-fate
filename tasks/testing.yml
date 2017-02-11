@@ -1,0 +1,68 @@
+---
+
+## for testing
+- name: ensure directory exists
+  file: dest={{ ffate_archivesdir }} state=directory mode='0755'
+
+- name: download test files
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ ffate_archivesdir }}/{{ item | basename }}"
+    mode: '0644'
+    validate_certs: false
+  with_items: "{{ ffate_testfiles }}"
+
+- name: uncompress test files
+## FIXME! Unable to find '/cases/sources/4-kwsrch-ext3.zip' in expected paths.
+#  unarchive:
+#    src: "{{ ffate_archivesdir }}/{{ item | basename }}"
+#    dest: "{{ ffate_archivesdir }}"
+  shell: "unzip {{ item | basename }} || bunzip2 {{ item | basename }} chdir={{ ffate_archivesdir }} creates={{ item | basename | regex_replace('.zip$', '') | regex_replace('.bz2$', '') | regex_replace('^10b-', '10-') }}"
+  with_items: "{{ ffate_testfiles }}"
+  become: yes
+  become_user: jenkins
+
+- name: list jobs
+  command: "java {{ ffate_jenkins_preargs }} list-jobs"
+  changed_when: false
+  ignore_errors: true
+  become: yes
+  become_user: jenkins
+  register: listjobs
+- debug: var=listjobs
+
+- name: remove previous jobs' artifacts to avoid conflict
+  file: name="/artifacts/{{ item }}" state=absent
+  with_items:
+    - testdisk-ext3
+    - testdisk-hfs
+    - testdisk-ntfs
+    - testmemory-win2k3
+    - testmemory-linux
+
+## needed?
+#ln -s /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/
+
+## FIXME? idempotency
+## FIXME! sometimes jenkins bug, https://issues.jenkins-ci.org/browse/JENKINS-12543
+## workaround with ssh key (need to be added to account)
+#$ java -jar /opt/jenkins-cli.jar -s http://localhost:8888/ -i ~/.ssh/id_rsa build findWindowsEvidence -p MEMORY_IMAGE_FILE=/cases/sources/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -s -v
+- name: launch test jobs
+  command: "{{ item }}"
+  with_items:
+    - "java {{ ffate_jenkins_preargs }} build 'findWindowsEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/3-kwsrch-ntfs/ntfs-img-kw-1.dd -p CASE_NAME=testdisk-ntfs {{ ffate_jenkins_args }}"
+    - "java {{ ffate_jenkins_preargs }} build 'findLinuxEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/4-kwsrch-ext3/ext3-img-kw-1.dd -p CASE_NAME=testdisk-ext3 {{ ffate_jenkins_args }}"
+    - "java {{ ffate_jenkins_preargs }} build 'findMacEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/macwd -p CASE_NAME=testdisk-hfs -p SLEUTHKIT_ARGS=\"-o 64\" -p LOG2TIMELINE_ARGS=\"-o 64\" {{ ffate_jenkins_args }}"
+    - "java {{ ffate_jenkins_preargs }} build 'Volatility' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -p VOLATILITY_PROFILE=Win2003SP0x86 {{ ffate_jenkins_args }}"
+    - "java {{ ffate_jenkins_preargs }} build 'Rekall' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3-rekall {{ ffate_jenkins_args }}"
+## Invalid Profile Debian5010 ?
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=Debian5010 {{ ffate_jenkins_args }}"
+  ignore_errors: true
+  become: yes
+  become_user: jenkins
+
+## if elk instance, PlasoExporter will trigger and export
+## need to recover index reference from PlasoExporter log
+#$ http://10.21.181.97:9200/26c86672f2634f1fb6ad00f02c71a1f2/_search?pretty=true&q=*:*
+# or browser in http://10.21.181.97:5601/app/kibana#/
+

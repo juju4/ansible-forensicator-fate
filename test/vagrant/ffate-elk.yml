@@ -1,0 +1,26 @@
+---
+
+- hosts: elk
+  vars:
+    - elasticsearch_repo_version: 5.x 
+    - logstash_repo_version: 5.x 
+    - kibana_repo_version: 5.x 
+  roles:
+#    - ansible-role-java
+#    - ansible-role-elasticsearch
+#    - ansible-role-logstash
+#    - ansible-role-kibana
+    - geerlingguy.java
+    - geerlingguy.elasticsearch
+    - geerlingguy.logstash
+    - geerlingguy.kibana
+  tasks:
+    - get_url:
+        url: https://raw.githubusercontent.com/log2timeline/plaso/master/data/plaso_kibana_example.json
+## non-existing in elk5. guess? does not seem to be usable
+#        dest: /opt/logstash/vendor/kibana/app/dashboards/plaso.json
+        dest: /usr/share/kibana/src/core_plugins/kibana/public/dashboard/plaso.json
+        mode: '0644'
+        backup: yes
+        checksum: 'sha256:b70d25438a66ef1550f61768e8ea4771238d2f09ae943b89b8e443996c6f4bd0'
+

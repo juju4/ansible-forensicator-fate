@@ -1,0 +1,44 @@
+---
+
+ffate_git_src: /home/sansforensics/forensicator-fate
+ffate_elk_ip: 10.21.181.97
+ffate_include_webui: true
+#ffate_include_webui: false
+## web ui path
+ffate_www: /var/www
+ffate_www2: "{{ ffate_www }}/forensicator-fate"
+
+## http://www.nsrl.nist.gov/Downloads.htm
+## http://www.nsrl.nist.gov/Downloads.htm
+#ffate_nist_nsrl_archive: http://www.nsrl.nist.gov/RDS/rds_2.55/Hashkeeper-RDS255_modern-Unified.zip
+#ffate_nist_nsrl_archive_hash: 'sha1:6b6b7268ec4d9154d0f1219ef4de434a75da35a2'
+## smaller one, 1.5G
+ffate_nist_nsrl_archive: http://www.nsrl.nist.gov/RDS/rds_2.55/rds_255_modernu.zip
+ffate_nist_nsrl_archive_hash: 'sha1:998040529248e40cae3f1e2e186b307c8f89d727' 
+
+ffate_testing: false
+ffate_archivesdir: /cases/sources
+## https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples
+ffate_testfiles:
+  - "https://downloads.sourceforge.net/project/dftt/Test%20Images/10_%20NTFS%20Autodetect%20%231/10b-ntfs-autodetect.zip"
+  - "https://downloads.sourceforge.net/project/dftt/Test%20Images/3_%20NTFS%20Keyword%20%231/3-kwsrch-ntfs.zip"
+  - "https://downloads.sourceforge.net/project/dftt/Test%20Images/4_%20EXT3FS%20Keyword%20%231/4-kwsrch-ext3.zip"
+## fls: Cannot determine file system type (NOk w hfs or ufs) vs 'original drive was set up  five partitions'
+  - "http://www.cfreds.nist.gov/images/MacWD/macwd.bz2"
+  - "https://downloads.sourceforge.net/project/dftt/Test%20Images/13_%20Windows%20Memory%20Analysis%20%231/boomer-win2003.zip"
+  - "http://www.honeynet.org/challenge2011/downloads/victoria-v8.memdump.img.zip"
+#  - "https://www.memoryanalysis.net/memuploads/MacMountainLion_10_8_3_AMDx64.vmem.7z"  ## 404...
+## where to find public mac memory dump?
+
+ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/"
+ffate_jenkins_args: "--username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }} -s -v"
+## if ssh key has been added to account
+#ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/ -i /var/lib/jenkins/.ssh/id_rsa"
+#ffate_jenkins_args: "-s -v"
+
+## tmp
+jenkins_jar_location: /opt/jenkins-cli.jar
+jenkins_hostname: localhost
+jenkins_http_port: 8888
+jenkins_admin_username: admin
+jenkins_admin_password: admin

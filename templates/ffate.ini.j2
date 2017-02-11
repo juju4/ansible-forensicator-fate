@@ -1,0 +1,12 @@
+[uwsgi]
+chdir = /var/www/forensicator-fate
+logto = /var/log/uwsgi/ffate.log
+uid = www-data
+gid = www-data
+master = true
+socket = /tmp/ffate.sock
+wsgi-file = ffate.py
+callable = app
+vacuum = true
+plugins = python
+mount = /var/www/forensicator-fate=ffate:app

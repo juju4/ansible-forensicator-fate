@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "a563f940-ef30-11e6-957e-336005f514d0",
+    "_type": "visualization",
+    "_source": {
+      "title": "plaso-count-per-datetime",
+      "visState": "{\"title\":\"plaso-count-per-datetime\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"datetime\",\"interval\":\"h\",\"customInterval\":\"2h\",\"min_doc_count\":1,\"extended_bounds\":{}}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"26c86672f2634f1fb6ad00f02c71a1f2\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "6e8b2eb0-ef31-11e6-8c50-97ad3e8e5d19",
+    "_type": "visualization",
+    "_source": {
+      "title": "plaso-filesize",
+      "visState": "{\"aggs\":[{\"params\":{\"field\":\"file_size\",\"orderBy\":\"2\",\"size\":20},\"schema\":\"segment\",\"type\":\"terms\",\"id\":\"3\"},{\"id\":\"2\",\"schema\":\"metric\",\"type\":\"count\"}],\"type\":\"histogram\",\"title\":\"plaso-filesize\"}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"26c86672f2634f1fb6ad00f02c71a1f2\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"file_size == 0\"}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "34fb3fb0-efbc-11e6-9036-2d909982c6fe",
+    "_type": "visualization",
+    "_source": {
+      "title": "plaso-source-distribution",
+      "visState": "{\"title\":\"plaso-source-distribution\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"source_short.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"26c86672f2634f1fb6ad00f02c71a1f2\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "5035ebe0-efbc-11e6-9036-2d909982c6fe",
+    "_type": "visualization",
+    "_source": {
+      "title": "plaso-parser-count",
+      "visState": "{\"title\":\"plaso-parser-count\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"parser.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"26c86672f2634f1fb6ad00f02c71a1f2\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  }
+]

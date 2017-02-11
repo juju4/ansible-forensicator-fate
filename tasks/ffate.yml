@@ -1,0 +1,100 @@
+---
+
+- name: git clone forensicator fate repository
+  git:
+#    repo: https://github.com/z3ndrag0n/forensicator-fate.git
+    repo: https://github.com/juju4/forensicator-fate.git
+    dest: "{{ ffate_git_src }}"
+  become: yes
+  become_user: sansforensics
+
+- name: git clone pyelasticsearch repository
+  git:
+    repo: https://github.com/rhec/pyelasticsearch.git
+    dest: /home/sansforensics/pyelasticsearch
+  become: yes
+  become_user: sansforensics
+- name: ensure setuptools are present
+  pip: name=setuptools state=present
+- name: build and install pyelasticsearch
+  command: "{{ item.c }} chdir=/home/sansforensics/pyelasticsearch creates={{ item.f }}"
+  with_items:
+    - { c: 'python setup.py build', f: '/home/sansforensics/pyelasticsearch/build/lib.linux-x86_64-2.7/pyelasticsearch/utils.py' }
+    - { c: 'python setup.py install', f: '/usr/local/lib/python2.7/dist-packages/pyelasticsearch-1.4-py2.7.egg/pyelasticsearch' }
+- name: create smb shares
+  command: "{{ ffate_git_src }}/scripts/create-shares.sh creates=/etc/samba/smb.conf-fate"
+
+
+## FIXME! got different results in cli than in ansible??? both requests should be valid
+- name: install jenkins views
+  #shell: "java -jar /opt/jenkins-cli.jar -s http://localhost:{{ jenkins_http_port }}/{{ jenkins_url_prefix }} create-view {{ item }} --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }} < {{ ffate_git_src }}/jenkins/views/{{ item }}.xml"
+  shell: "java -jar {{ jenkins_jar_location }} -s http://localhost:{{ jenkins_http_port }}/{{ jenkins_url_prefix }} create-view --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }} < {{ ffate_git_src }}/jenkins/views/{{ item }}.xml"
+  with_items:
+    - FSAnalysis
+    - MemoryAnalysis
+    - HelperTasks
+    - ForensicatorFATE
+  ignore_errors: true
+
+- name: install guess_profile.pl
+  copy:
+    src: "{{ ffate_git_src }}/scripts/guess_profile.pl"
+    dest: /usr/bin/guess_profile.pl
+    mode: '0755'
+    owner: jenkins
+    group: jenkins
+    remote_src: true
+
+- name: update pg_hba.conf local to trust
+  replace: "dest=/etc/postgresql/9.3/main/pg_hba.conf regexp={{ item.re }} replace={{ item.rep }} backup=yes"
+  with_items:
+    - { re: '^local(\s+)all(\s+)postgres(\s+)peer', rep: '#local\1all\2postgres\3trust' } 
+    - { re: '^local(\s+)all(\s+)all(\s+)peer', rep: 'local\1all\2all\3trust' } 
+  notify:
+    - restart postgres
+- name: copy ffate db on host
+  template: src=ffate.sql.j2 dest=/var/tmp/ffate.sql mode=0644
+- name: check marker for ffate db import
+  stat: path=/root/.ffate_import_db
+  register: importdb
+- name: import ffate db in postgres
+  command: "psql -U webpy -d webpy -f /var/tmp/ffate.sql"
+  become: yes
+  become_user: postgres
+  ignore_errors: true
+  when: not importdb.stat.exists
+- name: add ffate db import market
+  file: dest=/root/.ffate_import_db state=touch
+  when: not importdb.stat.exists
+#test: $ sudo -u postgres psql -U webpy webpy
+#      webpy=> SELECT param_value FROM config WHERE param_name = 'ELK-IP';
+
+- include: ffate-webui.yml
+  when: ffate_include_webui
+
+- include: nist-nsrl.yml
+
+## side configuration
+#- name: add jenkins user to sansforensics group - rw /cases
+#  user: name=jenkins append=yes groups=sansforensics
+#- name: ensure jenkins user can rw to /artifacts
+#  file: dest=/artifacts owner=jenkins mode=0755
+## or more precises
+- name: give jenkins access to /cases and /artifacts with acl
+  acl:
+    path: "{{ item }}"
+    entity: jenkins
+    etype: user
+    permissions: rwx
+    state: present
+  with_items:
+    - /cases
+    - /artifacts
+- name: ensure sh points to bash for ffate jenkins script
+  file: src=/bin/bash dest=/bin/sh state=link force=yes
+- name: libcurl.so.4 conflict
+  file: dest=/usr/local/lib/libcurl.so.4 state=absent
+  notify:
+    - reload ldconfig
+
+#/etc/elasticsearch/elasticsearch.yml: /network.host: [ "_site_", "localhost" ]/ 

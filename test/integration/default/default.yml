@@ -1,0 +1,60 @@
+---
+
+- hosts: all
+#- hosts: test-kitchen
+  vars:
+    - sift_docker: false
+    - sift_include_volplugins: false
+    - ffate_testing: true
+    - jenkins_numExecutors: 3
+    - jenkins_plugins:
+      - parameterized-trigger
+      - conditional-buildstep
+## https://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin
+      - rebuild
+    - jenkins_job_examples: []
+#    - jenkins_job_examples:
+#        - test
+    - jenkins_job_local_examples:
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/bulk_extractor_disk.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/bulk_extractor_memory.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/bulk_extractor.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Carving.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/findLinuxEvidence.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/findMacEvidence.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/findWindowsEvidence.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/FStimeline.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/IOC.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/NSRL.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/PlasoExporter.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Rekall.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/sorter.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Supertimeline.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.0.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.1.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.2.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.3.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.4.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.5.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.6.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.7.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.8.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityLinux.1-ps.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityLinux.2-lib.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityLinux.3-net.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityLinux.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityMac.1-ps.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityMac.2-lib.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityMac.3-net.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityMac.4-injection.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/VolatilityMac.xml"
+        - "/home/sansforensics/forensicator-fate/jenkins/jobs/Volatility.xml"
+    - postgresql_databases:
+      - name: webpy
+        postgresql_users:
+          - name: webpy
+            priv: ALL
+            db: webpy
+  roles:
+    - juju4.forensicator-fate
+
