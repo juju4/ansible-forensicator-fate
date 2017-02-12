@@ -25,13 +25,11 @@
   command: "{{ ffate_git_src }}/scripts/create-shares.sh creates=/etc/samba/smb.conf-fate"
 
 ## must be after repository git clone
-- name: install jenkins jobs
-  block:
+- block:
     - include: "jenkins-create-job.yml job_name={{ item[:-4] | basename }} job_file={{ item }}"
       with_items: "{{ ffate_job_local }}"
   when: ffate_job_local is defined and ffate_job_local != []
-- name: install jenkins views
-  block:
+- block:
     - include: "jenkins-create-view.yml view_name={{ item[:-4] | basename }} view_file={{ item }}"
       with_items: "{{ ffate_view_local }}"
   when: ffate_view_local is defined and ffate_view_local != []
