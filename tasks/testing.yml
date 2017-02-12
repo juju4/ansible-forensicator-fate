@@ -31,7 +31,10 @@
   shell: "unzip {{ item | basename }} || bunzip2 {{ item | basename }} chdir={{ ffate_archivesdir }} creates={{ item | basename | regex_replace('.zip$', '') | regex_replace('.bz2$', '') | regex_replace('^10b-', '10-') }}"
   with_items: "{{ ffate_testfiles }}"
 
-- name: list jobs
+## non-impacting error message when using localhost
+## 'SEVERE: I/O error in channel CLI connection to http://localhost:8888/'
+## use external IP, https://github.com/jenkinsci/docker/issues/164
+- name: list jobs with java
   command: "java {{ ffate_jenkins_preargs }} list-jobs {{ ffate_jenkins_args }}"
   changed_when: false
   ignore_errors: true
@@ -39,6 +42,11 @@
   become_user: jenkins
   register: listjobs
 - debug: var=listjobs
+- name: list jobs from shell
+  command: "ls {{ jenkins_root }}/jobs"
+  register: listjobs2
+- debug: var=listjobs2
+
 
 - name: remove previous jobs' artifacts to avoid conflict
   file: name="/artifacts/{{ item }}" state=absent

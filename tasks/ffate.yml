@@ -24,17 +24,17 @@
 - name: create smb shares
   command: "{{ ffate_git_src }}/scripts/create-shares.sh creates=/etc/samba/smb.conf-fate"
 
-
-## FIXME! got different results in cli than in ansible??? both requests should be valid
+## must be after repository git clone
+- name: install jenkins jobs
+  block:
+    - include: "jenkins-create-job.yml job_name={{ item[:-4] | basename }} job_file={{ item }}"
+      with_items: "{{ ffate_job_local }}"
+  when: ffate_job_local is defined and ffate_job_local != []
 - name: install jenkins views
-  #shell: "java -jar /opt/jenkins-cli.jar -s http://localhost:{{ jenkins_http_port }}/{{ jenkins_url_prefix }} create-view {{ item }} --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }} < {{ ffate_git_src }}/jenkins/views/{{ item }}.xml"
-  shell: "java -jar {{ jenkins_jar_location }} -s http://localhost:{{ jenkins_http_port }}/{{ jenkins_url_prefix }} create-view --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }} < {{ ffate_git_src }}/jenkins/views/{{ item }}.xml"
-  with_items:
-    - FSAnalysis
-    - MemoryAnalysis
-    - HelperTasks
-    - ForensicatorFATE
-  ignore_errors: true
+  block:
+    - include: "jenkins-create-view.yml view_name={{ item[:-4] | basename }} view_file={{ item }}"
+      with_items: "{{ ffate_view_local }}"
+  when: ffate_view_local is defined and ffate_view_local != []
 
 - name: install guess_profile.pl
   copy:
