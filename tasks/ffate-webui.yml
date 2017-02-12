@@ -34,7 +34,7 @@
   changed_when: false
   ignore_errors: true
   register: lstemplates
-- debug: var=lstemplates
+#- debug: var=lstemplates
 - name: install ffate templates
   copy:
     src: "{{ item }}"

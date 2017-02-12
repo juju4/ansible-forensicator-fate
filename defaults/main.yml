@@ -18,6 +18,7 @@ ffate_nist_nsrl_archive_hash: 'sha1:998040529248e40cae3f1e2e186b307c8f89d727'
 
 ffate_testing: false
 ffate_archivesdir: /cases/sources
+## If you change this list, you have to review tasks/testing.yml and test/integration/default/serverspec/ffate_testing_spec.rb
 ## https://github.com/volatilityfoundation/volatility/wiki/Memory-Samples
 ffate_testfiles:
   - "https://downloads.sourceforge.net/project/dftt/Test%20Images/10_%20NTFS%20Autodetect%20%231/10b-ntfs-autodetect.zip"
@@ -30,9 +31,10 @@ ffate_testfiles:
 #  - "https://www.memoryanalysis.net/memuploads/MacMountainLion_10_8_3_AMDx64.vmem.7z"  ## 404...
 ## where to find public mac memory dump?
 
-ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/"
-ffate_jenkins_args: "--username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }}"
+## FIXME! sometimes jenkins bug w authentication, https://issues.jenkins-ci.org/browse/JENKINS-12543 = using ssh auth
+#ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/"
+#ffate_jenkins_args: "--username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }}"
 ## if ssh key has been added to account
-#ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/ -i /var/lib/jenkins/.ssh/id_rsa"
-#ffate_jenkins_args: ""
+ffate_jenkins_preargs: "-jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/ -i /var/lib/jenkins/.ssh/id_rsa"
+ffate_jenkins_args: ""
 

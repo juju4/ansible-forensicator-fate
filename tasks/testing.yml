@@ -4,6 +4,17 @@
 - name: ensure directory exists
   file: dest={{ ffate_archivesdir }} state=directory mode='0755'
 
+- meta: flush_handlers
+- name: ensure jenkins service is started
+  service: name=jenkins state=started
+- name: Wait for Jenkins to be available before testing.
+  shell: "curl -D - --silent --max-time 5 http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/cli/"
+  register: result
+  until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+  retries: "{{ jenkins_connection_retries }}"
+  delay: "{{ jenkins_connection_delay }}"
+  changed_when: false
+
 - name: download test files
   get_url:
     url: "{{ item }}"
@@ -50,7 +61,7 @@
   with_items:
     - "java {{ ffate_jenkins_preargs }} build 'findWindowsEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/3-kwsrch-ntfs/ntfs-img-kw-1.dd -p CASE_NAME=testdisk-ntfs {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'findLinuxEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/4-kwsrch-ext3/ext3-img-kw-1.dd -p CASE_NAME=testdisk-ext3 {{ ffate_jenkins_args }} -s -v"
-    - "java {{ ffate_jenkins_preargs }} build 'findMacEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/macwd -p CASE_NAME=testdisk-hfs -p SLEUTHKIT_ARGS=\"-o 64\" -p LOG2TIMELINE_ARGS=\"-o 64\" {{ ffate_jenkins_args }} -s -v"
+    - "java {{ ffate_jenkins_preargs }} build 'findMacEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/macwd -p CASE_NAME=testdisk-hfs -p SLEUTHKIT_ARGS=\"-o 64\" -p LOG2TIMELINE_ARGS=\"-o 64\" -p BLKLS_ARGS=\"-o 64\" {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Volatility' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -p VOLATILITY_PROFILE=Win2003SP0x86 {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Rekall' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3-rekall {{ ffate_jenkins_args }} -s -v"
 ## Invalid Profile Debian5010 ?
