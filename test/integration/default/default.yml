@@ -5,6 +5,7 @@
   vars:
     - sift_docker: false
     - sift_include_volplugins: false
+    - sift_do_x11: false
     - ffate_testing: true
     - jenkins_numExecutors: 3
     - jenkins_plugins:
