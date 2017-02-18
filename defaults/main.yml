@@ -74,7 +74,7 @@ ffate_job_local:
   - "{{ ffate_git_src }}/jenkins/jobs/VolatilityMac.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/Volatility.xml"
 
-ffate_views_local:
+ffate_view_local:
   - "{{ ffate_git_src }}/jenkins/views/FSAnalysis.xml"
   - "{{ ffate_git_src }}/jenkins/views/MemoryAnalysis.xml"
   - "{{ ffate_git_src }}/jenkins/views/HelperTasks.xml"

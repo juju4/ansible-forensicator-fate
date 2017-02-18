@@ -19,14 +19,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
        ansible.sudo = true
        ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
        ansible.groups = {
-          "vagrantselect" => ["vmyrole" ],
+          "vagrantselect" => ["vffate" ],
+          "elk" => ["vffate" ],
+          "ffate" => ["vffate" ],
        }
     end
 
-    config.vm.define "vmyrole" do |vmyrole|
-        vmyrole.vm.hostname = "vmyrole"
-        vmyrole.vm.provider "virtualbox" do |v|
-          v.memory = 1024
+    config.vm.define "vffate" do |vffate|
+        vffate.vm.hostname = "vffate"
+        vffate.vm.provider "virtualbox" do |v|
+          v.memory = 4096
         end
     end
 

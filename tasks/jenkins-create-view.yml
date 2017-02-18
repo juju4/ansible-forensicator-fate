@@ -1,7 +1,10 @@
 ---
 
-- stat: path={{ jenkins_root }}/views/{{ view_name | basename }}
-  register: viewdir
+- name: check if view exists in jenkins config
+  command: "grep {{ view_name | basename }} {{ jenkins_root }}/config.xml"
+  register: viewconf
+  ignore_errors: true
+  changed_when: false
 
 - stat: path={{ view_file }}
   register: viewf
@@ -16,5 +19,5 @@
     --password {{ jenkins_admin_password }} < {{ view_file }}
   args:
     creates: "{{ jenkins_root }}/views/{{ view_name | basename }}"
-  when: not viewdir.stat.exists
+  when: "not '{{ view_name | basename }}' in viewconf.stdout"
 

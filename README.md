@@ -86,6 +86,8 @@ $ packer build -only=digitalocean packer-*.json
 rm -R /var/lib/jenkins/jobs/*/builds/* /artefacts/*
 ```
 
+* SIFT and ELK require a lot of memory. 8GB+ recommended. 4GB minimum.
+
 
 ## License
 

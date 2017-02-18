@@ -1,2 +1,5 @@
 ---
 
+## folder containaing pg_hba.conf
+ffate_postgresql_etc: '/etc/postgresql/9.5/main'
+

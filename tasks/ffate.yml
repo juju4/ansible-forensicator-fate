@@ -44,7 +44,11 @@
     remote_src: true
 
 - name: update pg_hba.conf local to trust
-  replace: "dest=/etc/postgresql/9.3/main/pg_hba.conf regexp={{ item.re }} replace={{ item.rep }} backup=yes"
+  replace:
+    dest: "{{ ffate_postgresql_etc }}/pg_hba.conf"
+    regexp: "{{ item.re }}"
+    replace: "{{ item.rep }}"
+    backup: yes
   with_items:
     - { re: '^local(\s+)all(\s+)postgres(\s+)peer', rep: '#local\1all\2postgres\3trust' } 
     - { re: '^local(\s+)all(\s+)all(\s+)peer', rep: 'local\1all\2all\3trust' } 
@@ -52,6 +56,10 @@
     - restart postgres
 - name: copy ffate db on host
   template: src=ffate.sql.j2 dest=/var/tmp/ffate.sql mode=0644
+  register: fsql
+- name: remove ffate db marker if present
+  file: dest=/root/.ffate_import_db state=absent
+  when: fsql.changed
 - name: check marker for ffate db import
   stat: path=/root/.ffate_import_db
   register: importdb
@@ -61,9 +69,10 @@
   become_user: postgres
   ignore_errors: true
   when: not importdb.stat.exists
+  register: importsql
 - name: add ffate db import market
   file: dest=/root/.ffate_import_db state=touch
-  when: not importdb.stat.exists
+  when: not importdb.stat.exists and importsql.succeeded
 #test: $ sudo -u postgres psql -U webpy webpy
 #      webpy=> SELECT param_value FROM config WHERE param_name = 'ELK-IP';
 
