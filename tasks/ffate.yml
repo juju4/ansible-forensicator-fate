@@ -52,8 +52,11 @@
   with_items:
     - { re: '^local(\s+)all(\s+)postgres(\s+)peer', rep: '#local\1all\2postgres\3trust' } 
     - { re: '^local(\s+)all(\s+)all(\s+)peer', rep: 'local\1all\2all\3trust' } 
-  notify:
-    - restart postgres
+  register: pgtrust
+- name: restart postgres
+  service: name=postgresql state=restarted
+  when: pgtrust.changed
+
 - name: copy ffate db on host
   template: src=ffate.sql.j2 dest=/var/tmp/ffate.sql mode=0644
   register: fsql
@@ -72,7 +75,7 @@
   register: importsql
 - name: add ffate db import market
   file: dest=/root/.ffate_import_db state=touch
-  when: not importdb.stat.exists and importsql.succeeded
+  when: not importdb.stat.exists and importsql|succeeded
 #test: $ sudo -u postgres psql -U webpy webpy
 #      webpy=> SELECT param_value FROM config WHERE param_name = 'ELK-IP';
 
