@@ -28,6 +28,7 @@
     - ffate_www: /var/www
     - ffate_www2: "{{ ffate_www }}/forensicator-fate"
     - ffate_elk_ip: 127.0.0.1
+    - ffate_testing: false
     - jenkins_admin_username: admin_ffate
     - jenkins_admin_password: admin_ffate
     - jenkins_plugins:

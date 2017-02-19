@@ -83,7 +83,10 @@
     - "java {{ ffate_jenkins_preargs }} build 'Volatility' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -p VOLATILITY_PROFILE=Win2003SP0x86 {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Rekall' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3-rekall {{ ffate_jenkins_args }} -s -v"
 ## Invalid Profile Debian5010 ?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=Debian5010 {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=Debian5010 {{ ffate_jenkins_args }}"
+## Note: Rekall has no centos profiles in official repository...
+## Invalid Profile too ?
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=CentOS50 -p VOLATILITY_ARGS=\"--profile LinuxCentOS50x86 --plugins /usr/local/share/volatility/profiles/Linux/CentOS/x86\" {{ ffate_jenkins_args }}"
   ignore_errors: true
   become: yes
   become_user: jenkins

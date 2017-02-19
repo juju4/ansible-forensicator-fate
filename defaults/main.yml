@@ -29,6 +29,8 @@ ffate_testfiles:
   - "http://www.cfreds.nist.gov/images/MacWD/macwd.bz2"
   - "https://downloads.sourceforge.net/project/dftt/Test%20Images/13_%20Windows%20Memory%20Analysis%20%231/boomer-win2003.zip"
   - "http://www.honeynet.org/challenge2011/downloads/victoria-v8.memdump.img.zip"
+  - "http://old.dfrws.org/2008/challenge/dfrws2008-challenge.zip"
+#  - "http://old.dfrws.org/2008/challenge/System.map-2.6.18-8.1.15.el5.zip"
 #  - "https://www.memoryanalysis.net/memuploads/MacMountainLion_10_8_3_AMDx64.vmem.7z"  ## 404...
 ## where to find public mac memory dump?
 
@@ -52,6 +54,7 @@ ffate_job_local:
   - "{{ ffate_git_src }}/jenkins/jobs/NSRL.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/PlasoExporter.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/Rekall.xml"
+  - "{{ ffate_git_src }}/jenkins/jobs/RekallMac.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/sorter.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/Supertimeline.xml"
   - "{{ ffate_git_src }}/jenkins/jobs/Volatility.0.xml"
