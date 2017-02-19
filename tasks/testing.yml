@@ -86,7 +86,11 @@
 #    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=Debian5010 {{ ffate_jenkins_args }}"
 ## Note: Rekall has no centos profiles in official repository...
 ## Invalid Profile too ?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=CentOS50 -p VOLATILITY_ARGS=\"--profile LinuxCentOS50x86 --plugins /usr/local/share/volatility/profiles/Linux/CentOS/x86\" {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=LinuxCentOS50x86 -p VOLATILITY_ARGS=\"--profile LinuxCentOS50x86 --plugins /usr/local/share/volatility/profiles/Linux/CentOS/x86\" {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux-rekall {{ ffate_jenkins_args }}"
+## Mac: miss public sample?
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac -p VOLATILITY_PROFILE=MacElCapitan_10_11_6_15G1217x64 VOLATILITY_ARGS=\"--plugins /usr/local/share/volatility/profiles/Mac/10.11\" {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac-rekall REKALL_ARGS=\"--profile file.json\" {{ ffate_jenkins_args }}"
   ignore_errors: true
   become: yes
   become_user: jenkins
