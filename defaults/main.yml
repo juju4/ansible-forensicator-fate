@@ -28,6 +28,7 @@ ffate_testfiles:
 ## fls: Cannot determine file system type (NOk w hfs or ufs) vs 'original drive was set up  five partitions'
   - "http://www.cfreds.nist.gov/images/MacWD/macwd.bz2"
   - "https://downloads.sourceforge.net/project/dftt/Test%20Images/13_%20Windows%20Memory%20Analysis%20%231/boomer-win2003.zip"
+  - "http://www.honeynet.org/challenge2011/downloads/victoria-v8.sda1.img.zip"
   - "http://www.honeynet.org/challenge2011/downloads/victoria-v8.memdump.img.zip"
   - "http://old.dfrws.org/2008/challenge/dfrws2008-challenge.zip"
 #  - "http://old.dfrws.org/2008/challenge/System.map-2.6.18-8.1.15.el5.zip"

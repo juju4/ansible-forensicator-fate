@@ -6,6 +6,11 @@ driver:
 #  profile: [ default, docker ]
 #  config:
 #    security.privileged: true
+## create a template?
+#  publish_image_name: "kitchen-ffate-#{instance.name}"
+#  use_publish_image: true
+#  publish_image_before_destroy: true
+#  publish_image_overwrite: true
 
 transport:
   name: sftp

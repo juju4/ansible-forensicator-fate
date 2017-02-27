@@ -54,8 +54,14 @@
     - testdisk-ext3
     - testdisk-hfs
     - testdisk-ntfs
+    - testdisk-victoria
     - testmemory-win2k3
+    - testmemory-win2k3-rekall
+    - testmemory-linux0
+    - testmemory-linux0-rekall
     - testmemory-linux
+    - testmemory-mac
+    - testmemory-mac-rekall
 
 ## needed?
 #ln -s /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/
@@ -79,23 +85,29 @@
   with_items:
     - "java {{ ffate_jenkins_preargs }} build 'findWindowsEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/3-kwsrch-ntfs/ntfs-img-kw-1.dd -p CASE_NAME=testdisk-ntfs {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'findLinuxEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/4-kwsrch-ext3/ext3-img-kw-1.dd -p CASE_NAME=testdisk-ext3 {{ ffate_jenkins_args }} -s -v"
+    - "java {{ ffate_jenkins_preargs }} build 'findLinuxEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.sda1.img -p CASE_NAME=testdisk-victoria {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'findMacEvidence' -p DISK_IMAGE_FILE={{ ffate_archivesdir }}/macwd -p CASE_NAME=testdisk-hfs -p SLEUTHKIT_ARGS=\"-o 64\" -p LOG2TIMELINE_ARGS=\"-o 64\" -p BLKLS_ARGS=\"-o 64\" {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Volatility' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -p VOLATILITY_PROFILE=Win2003SP0x86 {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Rekall' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3-rekall {{ ffate_jenkins_args }} -s -v"
 ## Invalid Profile Debian5010 ?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=Debian5010 {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=LinuxDebian5010x86 -p VOLATILITY_ARGS=\"--profile LinuxDebian5010x86 --plugins /usr/local/share/volatility/profiles/Linux/Debian/x86\" {{ ffate_jenkins_args }} -s -v"
 ## Note: Rekall has no centos profiles in official repository...
+    - "rekall convert_profile /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /artifacts/Debian5010x86.json"
+    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0-rekall -p REKALL_ARGS=\"-f {{ ffate_archivesdir }}/victoria-v8.memdump.img --profile /artifacts/Debian5010x86.json\" {{ ffate_jenkins_args }} -s -v"
+    - "java {{ ffate_jenkins_preargs }} build 'bulk_extractor_memory' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0-bulkextract {{ ffate_jenkins_args }} -s -v"
 ## Invalid Profile too ?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=LinuxCentOS50x86 -p VOLATILITY_ARGS=\"--profile LinuxCentOS50x86 --plugins /usr/local/share/volatility/profiles/Linux/CentOS/x86\" {{ ffate_jenkins_args }}"
-## ERROR:rekall.1:No profiles match this image. Try specifying manually.
-#    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux-rekall {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=LinuxCentOS50x86 -p VOLATILITY_ARGS=\"--profile LinuxCentOS50x86 --plugins /usr/local/share/volatility/profiles/Linux/CentOS/x86\" {{ ffate_jenkins_args }} -s -v"
+## (default) ERROR:rekall.1:No profiles match this image. Try specifying manually.
+## (convert profile CentOS50/51/510) A DTB value was found but failed to verify. See logging messages for more information.
+#    - "rekall convert_profile /usr/local/share/volatility/profiles/Linux/CentOS/x86/CentOS51.zip /artifacts/CentOS51x86.json"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/response_data/challenge.mem -p CASE_NAME=testmemory-linux-rekall -p REKALL_ARGS=\"-f {{ ffate_archivesdir }}/response_data/challenge.mem --profile /artifacts/CentOS51x86.json\" {{ ffate_jenkins_args }} -s -v"
 ## Mac: miss public sample?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac -p VOLATILITY_PROFILE=MacElCapitan_10_11_6_15G1217x64 VOLATILITY_ARGS=\"--plugins /usr/local/share/volatility/profiles/Mac/10.11\" {{ ffate_jenkins_args }}"
-#    - "java {{ ffate_jenkins_preargs }} build 'RekallMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac-rekall REKALL_ARGS=\"--profile file.json\" {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac -p VOLATILITY_PROFILE=MacElCapitan_10_11_6_15G1217x64 -p VOLATILITY_ARGS=\"--plugins /usr/local/share/volatility/profiles/Mac/10.11\" {{ ffate_jenkins_args }} -s -v"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/?sample -p CASE_NAME=testmemory-mac-rekall REKALL_ARGS=\"--profile file.json\" {{ ffate_jenkins_args }} -s -v"
 ## from Art of Memory Forensics, 4GB!!!
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/linux/linux-sample-1.bin -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=Linuxbookx64 -p VOLATILITY_ARGS=\"--profile Linuxbookx64 --plugins {{ ffate_archivesdir }}/linux\" {{ ffate_jenkins_args }}"
-#    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/linux/linux-sample-1.bin -p CASE_NAME=testmemory-linux2-rekall {{ ffate_jenkins_args }}"
-#    - "java {{ ffate_jenkins_preargs }} build 'RekallMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/mac/mac-sample-1.bin -p CASE_NAME=testmemory-mac2-rekall {{ ffate_jenkins_args }}"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/linux/linux-sample-1.bin -p CASE_NAME=testmemory-linux -p VOLATILITY_PROFILE=Linuxbookx64 -p VOLATILITY_ARGS=\"--profile Linuxbookx64 --plugins {{ ffate_archivesdir }}/linux\" {{ ffate_jenkins_args }} -s -v"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/linux/linux-sample-1.bin -p CASE_NAME=testmemory-linux2-rekall {{ ffate_jenkins_args }} -s -v"
+#    - "java {{ ffate_jenkins_preargs }} build 'RekallMac' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/mac/mac-sample-1.bin -p CASE_NAME=testmemory-mac2-rekall {{ ffate_jenkins_args }} -s -v"
   ignore_errors: true
   become: yes
   become_user: jenkins
