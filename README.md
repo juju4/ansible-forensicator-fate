@@ -95,6 +95,9 @@ Basically
     lxc restart container1
     mknod -m660 /dev/loop8 b 7 8
     mount -o loop,ro,noexec,noload /path/image /mnt
+Same with docker
+https://groups.google.com/forum/#!topic/docker-user/JmHko2nstWQ
+https://stackoverflow.com/questions/22028795/is-it-possible-to-mount-an-iso-inside-a-docker-container
 
 * install Job for iscsid.service failed because a configured resource limit was exceeded
 https://bugs.launchpad.net/ubuntu/+source/open-iscsi/+bug/1651497

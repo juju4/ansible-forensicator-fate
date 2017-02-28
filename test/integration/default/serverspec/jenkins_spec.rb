@@ -53,6 +53,7 @@ describe file('/var/log/jenkins/jenkins.log') do
   its(:content) { should_not match /WARNING: Could not intialize the host network interface on nullbecause of an error:/ }
   its(:content) { should_not match /WARNING: CLI authentication failure/ }
   its(:content) { should_not match /WARNING: Failed to run script file/ }
+  its(:content) { should_not match /INFO: CLI login attempt failed/ }
 end
 
 
