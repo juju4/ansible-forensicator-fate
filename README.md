@@ -88,6 +88,16 @@ rm -R /var/lib/jenkins/jobs/*/builds/* /artefacts/*
 
 * SIFT and ELK require a lot of memory. 8GB+ recommended. 4GB minimum.
 
+* If using from a lxd container, they are default restriction preventing mount loop.
+https://github.com/lxc/lxd/issues/1693
+Basically
+    lxc config set container1 security.privileged true
+    lxc restart container1
+    mknod -m660 /dev/loop8 b 7 8
+    mount -o loop,ro,noexec,noload /path/image /mnt
+
+* install Job for iscsid.service failed because a configured resource limit was exceeded
+https://bugs.launchpad.net/ubuntu/+source/open-iscsi/+bug/1651497
 
 ## License
 

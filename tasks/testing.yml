@@ -62,6 +62,11 @@
     - testmemory-linux
     - testmemory-mac
     - testmemory-mac-rekall
+- name: add symlink to used non-standard profile
+  file:
+    src: /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip
+    dest: /usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/Debian5010.zip
+    state: link
 
 ## needed?
 #ln -s /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/
@@ -90,7 +95,8 @@
     - "java {{ ffate_jenkins_preargs }} build 'Volatility' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3 -p VOLATILITY_PROFILE=Win2003SP0x86 {{ ffate_jenkins_args }} -s -v"
     - "java {{ ffate_jenkins_preargs }} build 'Rekall' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/boomer-win2003/boomer-win2003-2006-03-17.img -p CASE_NAME=testmemory-win2k3-rekall {{ ffate_jenkins_args }} -s -v"
 ## Invalid Profile Debian5010 ?
-#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=LinuxDebian5010x86 -p VOLATILITY_ARGS=\"--profile LinuxDebian5010x86 --plugins /usr/local/share/volatility/profiles/Linux/Debian/x86\" {{ ffate_jenkins_args }} -s -v"
+#    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=LinuxDebian5010x86 -p VOLATILITY_ARGS=\"--profile LinuxDebian5010x86 --plugins /usr/local/share/volatility/profiles/Linux/Debian/x86\" {{ ffate_jenkins_args }} -s -v" ## NOK
+    - "java {{ ffate_jenkins_preargs }} build 'VolatilityLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0 -p VOLATILITY_PROFILE=LinuxDebian5010x86 {{ ffate_jenkins_args }} -s -v"
 ## Note: Rekall has no centos profiles in official repository...
     - "rekall convert_profile /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /artifacts/Debian5010x86.json"
     - "java {{ ffate_jenkins_preargs }} build 'RekallLinux' -p MEMORY_IMAGE_FILE={{ ffate_archivesdir }}/victoria-v8.memdump.img -p CASE_NAME=testmemory-linux0-rekall -p REKALL_ARGS=\"-f {{ ffate_archivesdir }}/victoria-v8.memdump.img --profile /artifacts/Debian5010x86.json\" {{ ffate_jenkins_args }} -s -v"

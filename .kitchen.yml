@@ -4,8 +4,9 @@ driver:
 ## docker.io need specificl profile else 'PermissionError: [Errno 13] Permission denied: '/sys/kernel/security/apparmor/profiles''
 ## https://www.stgraber.org/2016/04/13/lxd-2-0-docker-in-lxd-712/
 #  profile: [ default, docker ]
-#  config:
-#    security.privileged: true
+## required to loop mount
+  config:
+    security.privileged: true
 ## create a template?
 #  publish_image_name: "kitchen-ffate-#{instance.name}"
 #  use_publish_image: true
