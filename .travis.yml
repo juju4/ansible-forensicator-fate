@@ -11,6 +11,7 @@ env:
     version: 14.04
 
 before_install:
+  - df -h
   - env
   - pwd
   - find -ls

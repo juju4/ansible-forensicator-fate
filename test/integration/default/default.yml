@@ -6,7 +6,9 @@
     - sift_docker: false
     - sift_include_volplugins: false
     - sift_do_x11: false
-    - ffate_testing: true
+## travis: 'No space left on device' with ffate_testing
+    - ffate_testing: false
+    - ffate_nist_nsrl_archive: ''
     - jenkins_admin_username: admin_ffate
     - jenkins_admin_password: admin_ffate
     - jenkins_numExecutors: 3
