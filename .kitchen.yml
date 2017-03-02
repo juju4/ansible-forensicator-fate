@@ -41,4 +41,7 @@ suites:
   - name: default
     run_list:
     attributes:
+  - name: default-ffate-testing
+    run_list:
+    attributes:
 
