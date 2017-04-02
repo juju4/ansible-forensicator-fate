@@ -102,6 +102,10 @@ https://stackoverflow.com/questions/22028795/is-it-possible-to-mount-an-iso-insi
 * install Job for iscsid.service failed because a configured resource limit was exceeded
 https://bugs.launchpad.net/ubuntu/+source/open-iscsi/+bug/1651497
 
+* Nginx can't start.
+Ensure you are using nginx-full on Ubuntu as nginx-light package has no uwsgi support.
+https://askubuntu.com/questions/553937/what-is-the-difference-between-the-core-full-extras-and-light-packages-for-ngi
+
 ## License
 
 BSD 2-clause

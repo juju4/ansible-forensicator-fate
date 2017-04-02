@@ -41,7 +41,7 @@
     dest: "{{ ffate_www }}/templates"
     remote_src: true
     backup: yes
-  with_items: "{{ lstemplates.stdout_lines }}"
+  with_items: "{{ lstemplates.stdout_lines | default([])}}"
 
 - name: install ffate.css
   copy:
