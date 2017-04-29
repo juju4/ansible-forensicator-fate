@@ -94,7 +94,7 @@ script:
   - "grep -q 'changed=0.*failed=0' /tmp/idempotency.log && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 1)"
 
   - sudo -E su $USER -c "lxc exec run-${distribution}-${version//./} -- time sh -x /etc/ansible/roles/juju4.forensicator-fate/test/integration/default/serverspec/run-local-tests.sh"
-  - sudo -E su $USER -c "lxc stop run-${distribution}-${version//./} --force"
+#  - sudo -E su $USER -c "lxc stop run-${distribution}-${version//./} --force"
 
 after_failure:
   # Check what happened on systemd systems.
