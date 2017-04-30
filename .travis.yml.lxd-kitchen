@@ -7,8 +7,9 @@ rvm:
 env:
   - distribution: ubuntu
     version: 16.04
-  - distribution: ubuntu
-    version: 14.04
+## ELKv5 requires Java8+, trusty NOK
+#  - distribution: ubuntu
+#    version: 14.04
 
 before_install:
   - df -h

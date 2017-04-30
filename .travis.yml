@@ -12,8 +12,9 @@ env:
 #    version: 7
   - distribution: ubuntu
     version: 16.04
-  - distribution: ubuntu
-    version: 14.04
+## ELKv5 requires Java8+, trusty NOK
+#  - distribution: ubuntu
+#    version: 14.04
 #  - distribution: ubuntu
 #    version: 12.04
 #  - distribution: alpine
@@ -98,7 +99,8 @@ script:
 
 after_failure:
   # Check what happened on systemd systems.
-  - sudo -E su $USER -c "lxc exec run-${distribution}-${version//./} -- systemctl -l status"
+  - sudo -E su $USER -c "lxc exec run-${distribution}-${version//./} -- nginx -t"
+  - sudo -E su $USER -c "lxc exec run-${distribution}-${version//./} -- systemctl -l status nginx.service"
   - sudo -E su $USER -c "lxc exec run-${distribution}-${version//./} -- journalctl -xe --no-pager"
 
 notifications:
