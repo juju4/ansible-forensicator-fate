@@ -26,6 +26,8 @@
           - name: webpy
             priv: ALL
             db: webpy
+## nginx-light miss uwsgi
+    - hardenwebserver_nginx_debian_pkg: 'nginx-full'
   roles:
     - juju4.forensicator-fate
 
