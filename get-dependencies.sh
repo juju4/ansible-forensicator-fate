@@ -19,7 +19,7 @@ fi
 [ ! -d $rolesdir/juju4.redhat-epel ] && git clone https://github.com/juju4/ansible-redhat-epel $rolesdir/juju4.redhat-epel
 [ ! -d $rolesdir/juju4.harden-nginx ] && git clone https://github.com/juju4/ansible-harden-nginx $rolesdir/juju4.harden-nginx
 [ ! -d $rolesdir/geerlingguy.java ] && git clone https://github.com/geerlingguy/ansible-role-java.git $rolesdir/geerlingguy.java
-[ ! -d $rolesdir/kbrebanov.java ] && git clone https://github.com/kbrebanov/ansible-role-java.git $rolesdir/kbrebanov.java
+[ ! -d $rolesdir/kbrebanov.java ] && git clone https://github.com/juju4/ansible-java.git $rolesdir/kbrebanov.java
 [ ! -d $rolesdir/geerlingguy.nginx ] && git clone https://github.com/geerlingguy/ansible-role-nginx.git $rolesdir/geerlingguy.nginx
 #[ ! -d $rolesdir/geerlingguy.jenkins ] && git clone https://github.com/geerlingguy/ansible-role-jenkins.git $rolesdir/geerlingguy.jenkins
 [ ! -d $rolesdir/geerlingguy.jenkins ] && git clone https://github.com/juju4/ansible-role-jenkins.git $rolesdir/geerlingguy.jenkins
