@@ -15,10 +15,11 @@ Web interface ffate.py is still not fully setup but tasks can be really managed 
 ### Ansible
 It was tested on the following versions:
  * 2.2
+ * 2.5
 
 ### Operating systems
 
-Ubuntu 14.04 (dependencies on SANS SIFT)
+Ubuntu 14.04, 16.04 and 19.04 (dependencies on SANS SIFT)
 
 ## Example Playbook
 

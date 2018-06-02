@@ -13,6 +13,8 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - trusty
+    - xenial
+    - bionic
   galaxy_tags:
   - system
   - security
