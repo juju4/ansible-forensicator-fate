@@ -50,3 +50,5 @@ jenkins_ufw_allow_ports_out:
 
 ## docker, lxc? (else dhclient will fail ...)
 jenkins_ufw_allow_if_out: []
+
+butler_url: 'https://s3.us-east-1.amazonaws.com/butlercli/1.0.0/linux/butler'
