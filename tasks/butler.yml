@@ -1,0 +1,29 @@
+---
+# http://www.blog.labouardy.com/butler-cli-import-export-jenkins-plugins-jobs/
+
+- name: Ensure butler is present
+  get_url:
+    url: "{{ butler_url }}"
+    dest: /usr/local/bin/butler
+    mode: '0755'
+    checksum: 'sha256:734bdbea6f9a2efb39f68ac6983a06d61b657cd2535d675f0b16be4793964d42'
+
+- name: create job restore tree
+  file:
+    path: "{{ jenkins_root }}/restore/jobs/{{ item[:-4] | basename }}"
+    state: directory
+    mode: '0755'
+  with_items: "{{ ffate_butler_job_local }}"
+- name: upload job examples
+  copy:
+    src: "{{ item }}"
+    dest: "{{ jenkins_root }}/{{ jenkins_root }}/restore/jobs/{{ item[:-4] | basename }}/config.xml"
+    mode: '0644'
+    backup: yes
+    remote_src: true
+  with_items: "{{ ffate_butler_job_local }}"
+
+- name: restore jobs with butler
+  command: "butler jobs import --server {{ jenkins_public_hostname }}:{{ jenkins_public_port }} --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }}"
+  args:
+    chdir: "{{ jenkins_root }}/{{ jenkins_root }}/restore"

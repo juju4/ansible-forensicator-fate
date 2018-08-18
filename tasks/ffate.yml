@@ -33,6 +33,7 @@
   template: src=ffate-smb.conf.j2 dest=/etc/samba/smb.conf backup=yes mode=0644
 
 ## must be after repository git clone
+- include: butler.yml
 - block:
     - include: "jenkins-create-job.yml job_name={{ item[:-4] | basename }} job_file={{ item }}"
       with_items: "{{ ffate_job_local }}"
