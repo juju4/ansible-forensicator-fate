@@ -17,7 +17,7 @@
 - name: upload job examples
   copy:
     src: "{{ item }}"
-    dest: "{{ jenkins_root }}/{{ jenkins_root }}/restore/jobs/{{ item[:-4] | basename }}/config.xml"
+    dest: "{{ jenkins_root }}/restore/jobs/{{ item[:-4] | basename }}/config.xml"
     mode: '0644'
     backup: yes
     remote_src: true
@@ -26,4 +26,4 @@
 - name: restore jobs with butler
   command: "butler jobs import --server {{ jenkins_public_hostname }}:{{ jenkins_public_port }} --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }}"
   args:
-    chdir: "{{ jenkins_root }}/{{ jenkins_root }}/restore"
+    chdir: "{{ jenkins_root }}/restore"
