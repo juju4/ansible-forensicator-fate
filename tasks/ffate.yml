@@ -4,6 +4,7 @@
   git:
 #    repo: https://github.com/z3ndrag0n/forensicator-fate.git
     repo: https://github.com/juju4/forensicator-fate.git
+    version: HEAD
     dest: "{{ ffate_git_src }}"
   become: yes
   become_user: sansforensics
@@ -12,6 +13,7 @@
   git:
     repo: https://github.com/rhec/pyelasticsearch.git
     dest: /home/sansforensics/pyelasticsearch
+    version: HEAD
   become: yes
   become_user: sansforensics
 - name: ensure setuptools are present
@@ -19,8 +21,12 @@
 - name: build and install pyelasticsearch
   command: "{{ item.c }} chdir=/home/sansforensics/pyelasticsearch creates={{ item.f }}"
   with_items:
-    - { c: 'python setup.py build', f: '/home/sansforensics/pyelasticsearch/build/lib.linux-x86_64-2.7/pyelasticsearch/utils.py' }
-    - { c: 'python setup.py install', f: '/usr/local/lib/python2.7/dist-packages/pyelasticsearch-1.4-py2.7.egg/pyelasticsearch' }
+    - { c: 'python setup.py build',
+        f: '/home/sansforensics/pyelasticsearch/build/lib.linux-x86_64-2.7/pyelasticsearch/utils.py'
+      }
+    - { c: 'python setup.py install',
+        f: '/usr/local/lib/python2.7/dist-packages/pyelasticsearch-1.4-py2.7.egg/pyelasticsearch'
+      }
 - name: create ffate directories
   file: dest={{ item }} state=directory mode=0755 owner=sansforensics
   with_items:
@@ -60,10 +66,8 @@
   with_items:
     - { re: '^local(\s+)all(\s+)postgres(\s+)peer', rep: '#local\1all\2postgres\3trust' }
     - { re: '^local(\s+)all(\s+)all(\s+)peer', rep: 'local\1all\2all\3trust' }
-  register: pgtrust
-- name: restart postgres
-  service: name=postgresql state=restarted
-  when: pgtrust.changed
+  notify:
+    - restart postgres
 
 - name: copy ffate db on host
   template: src=ffate.sql.j2 dest=/var/tmp/ffate.sql mode=0644

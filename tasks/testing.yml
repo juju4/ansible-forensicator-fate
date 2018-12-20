@@ -10,7 +10,9 @@
 - name: Wait for Jenkins to be available before testing.
   shell: "curl -D - --silent --max-time 5 http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/cli/"
   register: result
-  until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+  until: >
+    (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and
+    (result.stdout.find("Please wait while") == -1)
   retries: "{{ jenkins_connection_retries }}"
   delay: "{{ jenkins_connection_delay }}"
   changed_when: false
@@ -28,7 +30,11 @@
 #  unarchive:
 #    src: "{{ ffate_archivesdir }}/{{ item | basename }}"
 #    dest: "{{ ffate_archivesdir }}"
-  shell: "unzip -n {{ item | basename }} || bunzip2 {{ item | basename }} chdir={{ ffate_archivesdir }} creates={{ item | basename | regex_replace('.zip$', '') | regex_replace('.bz2$', '') | regex_replace('^10b-', '10-') }}"
+  shell: >
+    unzip -n {{ item | basename }} || bunzip2 {{ item | basename }}
+  args:
+    chdir: "{{ ffate_archivesdir }}"
+    creates: "{{ item | basename | regex_replace('.zip$', '') | regex_replace('.bz2$', '') | regex_replace('^10b-', '10-') }}"
   with_items: "{{ ffate_testfiles }}"
 
 ## non-impacting error message when using localhost
@@ -68,15 +74,14 @@
     dest: /usr/local/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/Debian5010.zip
     state: link
 
-## needed?
-#ln -s /usr/local/share/volatility/profiles/Linux/Debian/x86/Debian5010.zip /usr/lib/python2.7/dist-packages/volatility/plugins/overlays/linux/
-
 - name: ensure jenkins service is started
   service: name=jenkins state=started
 - name: Wait for Jenkins to be available before testing.
   shell: "curl -D - --silent --max-time 5 http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/cli/"
   register: result
-  until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+  until: >
+    (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and
+    (result.stdout.find("Please wait while") == -1)
   retries: "{{ jenkins_connection_retries }}"
   delay: "{{ jenkins_connection_delay }}"
   changed_when: false
@@ -122,4 +127,3 @@
 ## need to recover index reference from PlasoExporter log
 #$ http://10.21.181.97:9200/26c86672f2634f1fb6ad00f02c71a1f2/_search?pretty=true&q=*:*
 # or browser in http://10.21.181.97:5601/app/kibana#/
-

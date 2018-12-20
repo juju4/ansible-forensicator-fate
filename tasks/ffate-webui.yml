@@ -9,7 +9,8 @@
     - /home/sansforensics/Downloads
     - /etc/uwsgi
 
-- stat: path="{{ ffate_www2 }}/ffate.py"
+- name: Check if ffate.py present
+  stat: path="{{ ffate_www2 }}/ffate.py"
   register: hasFfatepy
 - name: install ffate.py web interface
   copy:
@@ -41,7 +42,7 @@
     dest: "{{ ffate_www }}/templates"
     remote_src: true
     backup: yes
-  with_items: "{{ lstemplates.stdout_lines | default([])}}"
+  with_items: "{{ lstemplates.stdout_lines | default([]) }}"
 
 - name: install ffate.css
   copy:
@@ -86,4 +87,3 @@
 - name: touch ffate.log
   file: dest=/var/log/uwsgi/ffate.log state=touch owner=www-data mode=0644
   when: not uwsgilog.stat.exists
-

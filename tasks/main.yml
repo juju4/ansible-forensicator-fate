@@ -1,6 +1,7 @@
 ---
 
-- fail: msg="This role is only compatible with Ubuntu"
+- name: FATAL
+  fail: msg="This role is only compatible with Ubuntu"
   when: ansible_distribution != 'Ubuntu'
 
 - name: Include version-specific variables for Ubuntu.
@@ -14,4 +15,3 @@
 
 - include: testing.yml
   when: ffate_testing
-

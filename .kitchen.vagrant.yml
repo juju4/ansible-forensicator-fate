@@ -20,6 +20,7 @@ provisioner:
   ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
 
 platforms:
+#  - name: ubuntu-18.04
   - name: ubuntu-16.04
 #  - name: ubuntu-14.04
 
@@ -30,4 +31,3 @@ suites:
   - name: default-ffate-testing
     run_list:
     attributes:
-

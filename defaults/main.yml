@@ -88,4 +88,3 @@ ffate_view_local:
   - "{{ ffate_git_src }}/jenkins/views/MemoryAnalysis.xml"
   - "{{ ffate_git_src }}/jenkins/views/HelperTasks.xml"
   - "{{ ffate_git_src }}/jenkins/views/ForensicatorFATE.xml"
-

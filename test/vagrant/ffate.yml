@@ -53,5 +53,4 @@
           priv: "ALL/config:ALL/cases:ALL"
           db: webpy
   roles:
-    - juju4.forensicator-fate
-
+    - juju4.forensicatorfate

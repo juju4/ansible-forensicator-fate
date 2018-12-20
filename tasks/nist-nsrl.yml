@@ -19,7 +19,7 @@
         remote_src: true
         mode: '0644'
         creates: /home/sansforensics/Downloads/NSRLFile.txt
-  when: not (ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true') and ffate_nist_nsrl_archive != ''
+  when: not (ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true') and ffate_nist_nsrl_archive
 - block:
     - name: create basic NSRL file for travis (1 good, 1 bad)
       lineinfile:
@@ -39,7 +39,7 @@
       with_items:
         - '"ProductCode","ProductName","ProductVersion","OpSystemCode","MfgCode","Language","ApplicationType"'
         - '10614,"Hacks AND Cracks","1999-2000","190","240","English","Hacker Tool"'
-  when: (ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true') or ffate_nist_nsrl_archive == ''
+  when: (ansible_env['TRAVIS'] is defined and ansible_env['TRAVIS'] == 'true') or not ffate_nist_nsrl_archive
 
 ## http://www.nsrl.nist.gov/nsrl-faqs.html#faq14 Which hashes are for known bad files? just "known application files."
 ## https://digital-forensics.sans.org/blog/2010/02/22/extracting-known-bad-hashset-from-nsrl/
@@ -74,4 +74,3 @@
   with_items:
     - { f: '/blacklist/known_bad_files.txt', c: '/blacklist/known_bad_files.txt-md5.idx' }
     - { f: '/whitelist/known_good_files.txt', c: '/whitelist/known_good_files.txt-md5.idx' }
-

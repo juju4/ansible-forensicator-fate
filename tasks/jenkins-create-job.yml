@@ -1,6 +1,7 @@
 ---
 
-- stat: path={{ jenkins_root }}/jobs/{{ job_name | basename }}
+- name: Check if job file exists
+  stat: path={{ jenkins_root }}/jobs/{{ job_name | basename }}
   register: jobdir
 
 - stat: path={{ job_file }}
@@ -10,11 +11,11 @@
 
 - name: load job example {{ job_name }} into jenkins through cli
   shell: >
-    java -jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/
+    java -jar {{ jenkins_jar_location }}
+    -s http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix | default('') }}/
     create-job {{ job_name | basename }}
     --username {{ jenkins_admin_username }}
     --password {{ jenkins_admin_password }} < {{ job_file }}
   args:
     creates: "{{ jenkins_root }}/jobs/{{ job_name | basename }}"
   when: not jobdir.stat.exists
-

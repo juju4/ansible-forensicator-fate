@@ -2,5 +2,4 @@
 
 - hosts: vagrantselect
   roles:
-    - juju4.forensicator-fate
-
+    - juju4.forensicatorfate

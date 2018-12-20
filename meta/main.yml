@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: forensicatorfate
   author: juju4
   description: Forensicator Fate - Bringing DevOps to Forensics
   license: BSD
@@ -22,4 +23,3 @@ dependencies:
   - juju4.sift
   - juju4.jenkins
   - geerlingguy.postgresql
-
