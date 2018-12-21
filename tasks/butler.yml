@@ -6,7 +6,7 @@
     url: "{{ butler_url }}"
     dest: /usr/local/bin/butler
     mode: '0755'
-    checksum: 'sha256:734bdbea6f9a2efb39f68ac6983a06d61b657cd2535d675f0b16be4793964d42'
+    checksum: 'sha256:ba202c0524370758418d2abf14b6c437f3ab9eb6b2aae5f9a46c3aad1caee729'
 
 - name: create job restore tree
   file:
