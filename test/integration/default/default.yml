@@ -22,6 +22,7 @@
         - {option: "JENKINS_ARGS", value: "--prefix={{ jenkins_url_prefix }} --httpListenAddress=127.0.0.1 --ajp13Port=-1 --httpsPort=-1 --sessionTimeout=180 {{ jenkins_java_options }}"}
         - {option: "JENKINS_JAVA_OPTIONS", value: "{{ jenkins_java_options }}"}
     - ffate_butler_job_local: []
+    - ffate_view_local: []
 #    - jenkins_ufw_if: eth0
     - jenkins_ufw_if: "{{ ansible_default_ipv4.interface }}"
     - postgresql_databases:
