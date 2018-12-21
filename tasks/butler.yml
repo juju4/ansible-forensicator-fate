@@ -27,3 +27,4 @@
   command: "butler jobs import --server {{ jenkins_public_hostname }}:{{ jenkins_public_port }} --username {{ jenkins_admin_username }} --password {{ jenkins_admin_password }}"
   args:
     chdir: "{{ jenkins_root }}/restore"
+  when: ffate_butler_job_local and ffate_butler_job_local != []
