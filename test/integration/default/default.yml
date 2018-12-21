@@ -9,11 +9,11 @@
 ## travis: 'No space left on device' with ffate_testing
     - ffate_testing: false
     - ffate_nist_nsrl_archive: ''
-    - jenkins_admin_username: admin_ffate
+    - jenkins_admin_username: adminffate
     - jenkins_admin_password: admin_ffate
     - jenkins_numExecutors: 3
     - jenkins_plugins:
-      - parameterized-trigger
+#      - parameterized-trigger
       - conditional-buildstep
 ## https://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin
       - rebuild
