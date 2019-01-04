@@ -4,7 +4,7 @@
   git:
 #    repo: https://github.com/z3ndrag0n/forensicator-fate.git
     repo: https://github.com/juju4/forensicator-fate.git
-    version: HEAD
+    version: "{{ ffate_version | default('600f54533769636e192161910122eab42cf6cf62') }}"
     dest: "{{ ffate_git_src }}"
   become: yes
   become_user: sansforensics
@@ -14,6 +14,7 @@
     repo: https://github.com/rhec/pyelasticsearch.git
     dest: /home/sansforensics/pyelasticsearch
     version: HEAD
+    version: "{{ ffate_pyelas | default('7c2d3dd7dba80e36f061cd20194287ba92b8f81f') }}"
   become: yes
   become_user: sansforensics
 - name: ensure setuptools are present
