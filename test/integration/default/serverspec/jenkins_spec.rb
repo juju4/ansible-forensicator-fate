@@ -30,24 +30,24 @@ end
 #describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url} login --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
 #  its(:exit_status) { should eq 0 }
 #end
-describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url} version --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-  its(:stdout) { should match /2\.\d+/ }
-  its(:exit_status) { should eq 0 }
-end
-describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url} list-plugins --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-  its(:stdout) { should match /rebuild/ }
-  its(:stdout) { should match /parameterized-trigger/ }
-  its(:exit_status) { should eq 0 }
-end
-
-describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url}jenkins version --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
-  its(:exit_status) { should eq 0 }
-end
-describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url}jenkins list-plugins --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
-  its(:stdout) { should match /rebuild/ }
-  its(:stdout) { should match /parameterized-trigger/ }
-  its(:exit_status) { should eq 0 }
-end
+#describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url} version --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+#  its(:stdout) { should match /2\.\d+/ }
+#  its(:exit_status) { should eq 0 }
+#end
+#describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url} list-plugins --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+#  its(:stdout) { should match /rebuild/ }
+#  its(:stdout) { should match /parameterized-trigger/ }
+#  its(:exit_status) { should eq 0 }
+#end
+#
+#describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url}jenkins version --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
+#  its(:exit_status) { should eq 0 }
+#end
+#describe command("java -jar /opt/jenkins-cli.jar -s #{jenkins_url}jenkins list-plugins --username #{jenkins_user} --password #{jenkins_pass}"), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
+#  its(:stdout) { should match /rebuild/ }
+#  its(:stdout) { should match /parameterized-trigger/ }
+#  its(:exit_status) { should eq 0 }
+#end
 
 describe file('/var/log/jenkins/jenkins.log') do
   it { should be_readable }
