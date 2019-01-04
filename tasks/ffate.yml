@@ -18,6 +18,8 @@
   become_user: sansforensics
 - name: ensure setuptools are present
   pip: name=setuptools state=present
+  register: pkg_result
+  until: pkg_result is success
 - name: build and install pyelasticsearch
   command: "{{ item.c }} chdir=/home/sansforensics/pyelasticsearch creates={{ item.f }}"
   with_items:
@@ -71,10 +73,9 @@
 
 - name: copy ffate db on host
   template: src=ffate.sql.j2 dest=/var/tmp/ffate.sql mode=0644
-  register: fsql
-- name: remove ffate db marker if present
-  file: dest=/root/.ffate_import_db state=absent
-  when: fsql.changed
+  notify:
+    - remove ffate db marker if present
+- meta: flush_handlers
 - name: check marker for ffate db import
   stat: path=/root/.ffate_import_db
   register: importdb

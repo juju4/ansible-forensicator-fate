@@ -58,8 +58,12 @@
     - uwsgi-emperor
     - uwsgi-plugin-python
     - python-webpy
+  register: pkg_result
+  until: pkg_result is success
 - name: install uwsgi
   pip: name=uwsgi state=present
+  register: pkg_result
+  until: pkg_result is success
 - name: set uwsgi config
   template:
     src: ffate.ini.j2

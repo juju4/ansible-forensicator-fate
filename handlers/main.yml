@@ -5,3 +5,6 @@
 
 - name: restart postgres
   service: name=postgresql state=restarted
+
+- name: remove ffate db marker if present
+  file: dest=/root/.ffate_import_db state=absent
