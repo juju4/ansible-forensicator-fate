@@ -13,7 +13,6 @@
   git:
     repo: https://github.com/rhec/pyelasticsearch.git
     dest: /home/sansforensics/pyelasticsearch
-    version: HEAD
     version: "{{ ffate_pyelas | default('7c2d3dd7dba80e36f061cd20194287ba92b8f81f') }}"
   become: yes
   become_user: sansforensics
