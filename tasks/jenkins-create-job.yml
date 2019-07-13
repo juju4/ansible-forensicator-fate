@@ -1,12 +1,15 @@
 ---
 
-- name: Check if job file exists
+- name: Check if target job file exists
   stat: path={{ jenkins_root }}/jobs/{{ job_name | basename }}
   register: jobdir
 
-- stat: path={{ job_file }}
+- name: Check if source job file exists
+  stat: path={{ job_file }}
   register: jobf
-- fail: msg="Missing job file for jenkins '{{ job_file }}'"
+- name: fail condition
+  fail:
+    msg: "Missing job file for jenkins '{{ job_file }}'"
   when: not jobf.stat.exists
 
 - name: load job example {{ job_name }} into jenkins through cli

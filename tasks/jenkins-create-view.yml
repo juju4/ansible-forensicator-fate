@@ -1,14 +1,17 @@
 ---
 
-- name: check if view exists in jenkins config
+- name: check if target view exists in jenkins config
   command: "grep {{ view_name | basename }} {{ jenkins_root }}/config.xml"
   register: viewconf
   ignore_errors: true
   changed_when: false
 
-- stat: path={{ view_file }}
+- name: Check if source view exists
+  stat: path={{ view_file }}
   register: viewf
-- fail: msg="Missing view file for jenkins '{{ view_file }}'"
+- name: fail condition
+  fail:
+    msg: "Missing view file for jenkins '{{ view_file }}'"
   when: not viewf.stat.exists
 
 - name: load view example {{ view_name }} into jenkins through cli

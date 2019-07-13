@@ -28,14 +28,9 @@
   with_items: "{{ ffate_testfiles }}"
 
 - name: uncompress test files
-## FIXME! Unable to find '/cases/sources/4-kwsrch-ext3.zip' in expected paths.
-#  unarchive:
-#    src: "{{ ffate_archivesdir }}/{{ item | basename }}"
-#    dest: "{{ ffate_archivesdir }}"
-  shell: >
-    unzip -n {{ item | basename }} || bunzip2 {{ item | basename }}
-  args:
-    chdir: "{{ ffate_archivesdir }}"
+  unarchive:
+    src: "{{ ffate_archivesdir }}/{{ item | basename }}"
+    dest: "{{ ffate_archivesdir }}"
     creates: "{{ item | basename | regex_replace('.zip$', '') | regex_replace('.bz2$', '') | regex_replace('^10b-', '10-') }}"
   with_items: "{{ ffate_testfiles }}"
 
