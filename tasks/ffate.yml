@@ -88,7 +88,7 @@
   register: importsql
 - name: add ffate db import market
   file: dest=/root/.ffate_import_db state=touch
-  when: not importdb.stat.exists and importsql|succeeded
+  when: not importdb.stat.exists and importsql is succeeded
 #test: $ sudo -u postgres psql -U webpy webpy
 #      webpy=> SELECT param_value FROM config WHERE param_name = 'ELK-IP';
 

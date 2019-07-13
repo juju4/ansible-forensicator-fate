@@ -29,24 +29,24 @@ postgresql_users:
 
 ## only needed for setup with elk
 jenkins_ufw_allow_ports_out:
-  - 22
-#  - 25
-  - 53
-  - 123
+  - '22'
+#  - '25'
+  - '53'
+  - '123'
 ## email/TLS?
-  - 587
+  - '587'
 ## mDNS (required by Jenkins)
-  - 5353
+  - '5353'
 ## web
-  - 80
-  - 443
-  - 8080
+  - '80'
+  - '443'
+  - '8080'
 ## gpg keyserver
-  - 11371
+  - '11371'
 ## using dhcp?
-  - 67
+  - '67'
 ## elasticsearch
-  - 9200
+  - '9200'
 
 ## docker, lxc? (else dhclient will fail ...)
 jenkins_ufw_allow_if_out: []
