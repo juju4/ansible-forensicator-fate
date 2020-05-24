@@ -12,6 +12,7 @@ env:
 #    version: 7
   - distribution: ubuntu
     version: 18.04
+    ANSIBLE_EXTRA_FLAGS: "'-e ansible_python_interpreter=/usr/bin/python3'"
 #  - distribution: alpine
 #    version: 3.4
 #  - distribution: debian
