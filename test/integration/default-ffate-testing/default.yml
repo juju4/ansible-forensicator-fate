@@ -33,5 +33,6 @@
             db: webpy
 ## nginx-light miss uwsgi
     - hardenwebserver_nginx_debian_pkg: 'nginx-full'
+    - nginx_pidfile: /run/nginx/nginx.pid
   roles:
     - juju4.forensicatorfate
