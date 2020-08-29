@@ -19,10 +19,9 @@ describe file('/usr/local/share/env-rekall/bin/rekall') do
   it { should exist }
   it { should be_executable }
 end
-describe command('/usr/local/share/env-rekall/bin/rekall --version') do
-  its(:stdout) { should match /This is Rekall Version/ }
-end
-describe command('/usr/local/bin/rekall --version') do
-  its(:stdout) { should match /This is Rekall Version/ }
-end
-
+#describe command('/usr/local/share/env-rekall/bin/rekall --version') do
+#  its(:stdout) { should match /This is Rekall Version/ }
+#end
+#describe command('/usr/local/bin/rekall --version') do
+#  its(:stdout) { should match /This is Rekall Version/ }
+#end
